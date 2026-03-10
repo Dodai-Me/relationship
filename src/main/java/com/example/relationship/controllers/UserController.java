@@ -1,4 +1,4 @@
-package com.example.relationship.controller;
+package com.example.relationship.controllers;
 
 import com.example.relationship.api_models.CreateUserRequest;
 import com.example.relationship.dao.WalletDAO;
@@ -6,6 +6,7 @@ import com.example.relationship.dto.UserDTO;
 import com.example.relationship.entity.User;
 import com.example.relationship.dao.UserDAO;
 import com.example.relationship.entity.Wallet;
+import com.example.relationship.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +55,7 @@ public class UserController {
             return userToUserDTO(optionalUser.get());
         }
 
-        return new UserDTO();
+        throw new EntityNotFoundException("Could not find User ID " + userId);
     }
 
     @PutMapping("users/{userId}")

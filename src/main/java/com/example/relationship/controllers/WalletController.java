@@ -1,9 +1,10 @@
-package com.example.relationship.controller;
+package com.example.relationship.controllers;
 
 import com.example.relationship.api_models.CreateWalletRequest;
 import com.example.relationship.dao.WalletDAO;
 import com.example.relationship.dto.WalletDTO;
 import com.example.relationship.entity.Wallet;
+import com.example.relationship.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,7 @@ public class WalletController {
             return walletToWalletDTO(optionalWallet.get());
         }
 
-        return new WalletDTO();
+        throw new EntityNotFoundException("Could not find Wallet ID " + walletId);
     }
 
     @PutMapping("/wallets/{walletId}")
