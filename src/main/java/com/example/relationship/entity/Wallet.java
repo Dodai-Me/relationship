@@ -1,13 +1,15 @@
 package com.example.relationship.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "wallets")
-@Data
+@Getter
+@Setter
 public class Wallet {
 
     @Id

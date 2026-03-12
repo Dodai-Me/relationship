@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class UserDTO {
-    Long id;
-    String uuid;
-    String firstName;
-    String lastName;
-    Wallet wallet;
+    private Long id;
+    private String uuid;
+    private String firstName;
+    private String lastName;
+    private Wallet wallet;
 }
