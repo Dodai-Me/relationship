@@ -15,8 +15,8 @@ import java.util.Optional;
 
 @Service
 public class TransactionService {
-    WalletDAO walletDAO;
-    TransactionDAO transactionDAO;
+    private final WalletDAO walletDAO;
+    private final TransactionDAO transactionDAO;
 
     @Autowired
     public TransactionService(WalletDAO walletDAO, TransactionDAO transactionDAO){

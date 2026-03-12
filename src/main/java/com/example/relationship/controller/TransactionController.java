@@ -3,6 +3,7 @@ package com.example.relationship.controller;
 import com.example.relationship.api_model.CreateTransactionRequest;
 import com.example.relationship.dto.TransactionDTO;
 import com.example.relationship.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,8 +12,9 @@ import java.util.List;
 @RequestMapping("/api")
 public class TransactionController {
 
-    TransactionService transactionService;
+    private final TransactionService transactionService;
 
+    @Autowired
     public TransactionController(TransactionService transactionService){
         this.transactionService = transactionService;
     }
