@@ -6,6 +6,7 @@ import com.example.relationship.dao.WalletDAO;
 import com.example.relationship.dto.TransactionDTO;
 import com.example.relationship.entity.Transaction;
 import com.example.relationship.entity.Wallet;
+import com.example.relationship.enums.TransactionType;
 import com.example.relationship.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class TransactionService {
     }
 
     public TransactionDTO createTransaction(CreateTransactionRequest createTransactionRequest){
+        Wallet wallet = new Wallet();
         Transaction transaction = new Transaction();
         transaction.setAmount(createTransactionRequest.getAmount());
         transaction.setTransactionType(createTransactionRequest.getTransactionType());
@@ -32,9 +34,26 @@ public class TransactionService {
         Optional<Wallet> optionalWallet = walletDAO.findById(createTransactionRequest.getWalletId());
 
         if(optionalWallet.isPresent()){
-            Wallet wallet = optionalWallet.get();
+            wallet = optionalWallet.get();
             transaction.setWallet(wallet);
         }
+
+        if(wallet.getBalance() < createTransactionRequest.getAmount() && createTransactionRequest.getTransactionType() == TransactionType.WITHDRAWAL){
+            throw new EntityNotFoundException("Insufficient Balance");
+        }
+
+        if(createTransactionRequest.getTransactionType() == TransactionType.DEPOSIT){
+            Long totalAmount = wallet.getBalance() + createTransactionRequest.getAmount();
+            wallet.setBalance(totalAmount);
+            walletDAO.save(wallet);
+        }
+
+        if (createTransactionRequest.getTransactionType() == TransactionType.WITHDRAWAL){
+            Long totalAmount = wallet.getBalance() - createTransactionRequest.getAmount();
+            wallet.setBalance(totalAmount);
+            walletDAO.save(wallet);
+        }
+
         transactionDAO.save(transaction);
         return transactionToTransactionDTO(transaction);
     }
