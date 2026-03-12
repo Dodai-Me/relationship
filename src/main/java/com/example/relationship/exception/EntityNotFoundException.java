@@ -1,4 +1,4 @@
-package com.example.relationship.exceptions;
+package com.example.relationship.exception;
 
 public class EntityNotFoundException extends RuntimeException{
     public EntityNotFoundException(String message) {

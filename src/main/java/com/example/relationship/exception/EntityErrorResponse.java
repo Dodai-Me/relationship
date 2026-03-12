@@ -1,4 +1,4 @@
-package com.example.relationship.exceptions;
+package com.example.relationship.exception;
 
 import lombok.Data;
 

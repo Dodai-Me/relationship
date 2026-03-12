@@ -1,4 +1,4 @@
-package com.example.relationship.api_models;
+package com.example.relationship.api_model;
 
 import lombok.Data;
 

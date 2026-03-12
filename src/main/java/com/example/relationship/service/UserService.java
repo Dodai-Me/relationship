@@ -1,32 +1,30 @@
-package com.example.relationship.controllers;
+package com.example.relationship.service;
 
-import com.example.relationship.api_models.CreateUserRequest;
+import com.example.relationship.api_model.CreateUserRequest;
+import com.example.relationship.dao.UserDAO;
 import com.example.relationship.dao.WalletDAO;
 import com.example.relationship.dto.UserDTO;
 import com.example.relationship.entity.User;
-import com.example.relationship.dao.UserDAO;
 import com.example.relationship.entity.Wallet;
-import com.example.relationship.exceptions.EntityNotFoundException;
+import com.example.relationship.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/api")
-public class UserController {
-    UserDAO userDao;
+@Service
+public class UserService {
+    UserDAO userDAO;
     WalletDAO walletDAO;
 
     @Autowired
-    UserController(UserDAO userDao, WalletDAO walletDAO){
-        this.userDao = userDao;
+    UserService(UserDAO userDAO, WalletDAO walletDAO){
+        this.userDAO = userDAO;
         this.walletDAO = walletDAO;
     }
 
-    @PostMapping("/users")
-    public UserDTO addUser(@RequestBody CreateUserRequest createUserRequest){
+    public UserDTO addUser(CreateUserRequest createUserRequest){
         User user = new User();
         user.setFirstName(createUserRequest.getFirstName());
         user.setLastName(createUserRequest.getLastName());
@@ -38,44 +36,40 @@ public class UserController {
             user.setWallet(wallet);
         }
 
-        userDao.save(user);
+        userDAO.save(user);
         return userToUserDTO(user);
     }
 
-    @GetMapping("/users")
-    public List<UserDTO> findAllUser(){
-        return userDao.findAll().stream().map(this::userToUserDTO).toList();
+    public List<UserDTO> findAllUsers(){
+        return userDAO.findAll().stream().map(this::userToUserDTO).toList();
     }
 
-    @GetMapping("/users/{userId}")
-    public UserDTO findById(@PathVariable Long userId){
-        Optional<User> optionalUser = userDao.findById(userId);
+    public UserDTO findById(Long id){
+        Optional<User> optionalUser = userDAO.findById(id);
 
         if(optionalUser.isPresent()){
             return userToUserDTO(optionalUser.get());
         }
 
-        throw new EntityNotFoundException("Could not find User ID " + userId);
+        throw new EntityNotFoundException("Could not find User ID " + id);
     }
 
-    @PutMapping("users/{userId}")
-    public UserDTO updateUser(@PathVariable Long userId, @RequestBody CreateUserRequest createUserRequest){
+    public UserDTO updateUser(Long id, CreateUserRequest createUserRequest){
+        Optional<User> optionalUser = userDAO.findById(id);
         User user = new User();
-        Optional<User> optionalUser = userDao.findById(userId);
 
         if(optionalUser.isPresent()){
             user = optionalUser.get();
             user.setFirstName(createUserRequest.getFirstName());
             user.setLastName(createUserRequest.getLastName());
         }
-        userDao.save(user);
+        userDAO.save(user);
         return userToUserDTO(user);
     }
 
-    @DeleteMapping("users/{userId}")
-    public String deleteById(@PathVariable Long userId){
-         userDao.deleteById(userId);
-         return "User ID " + userId + " has been deleted";
+    public String deleteById(Long id){
+        userDAO.deleteById(id);
+        return "User ID " + id + " has been deleted";
     }
 
     public UserDTO userToUserDTO(User user){
