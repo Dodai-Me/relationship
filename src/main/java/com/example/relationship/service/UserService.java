@@ -15,8 +15,8 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    UserDAO userDAO;
-    WalletDAO walletDAO;
+    private final UserDAO userDAO;
+    private final WalletDAO walletDAO;
 
     @Autowired
     UserService(UserDAO userDAO, WalletDAO walletDAO){

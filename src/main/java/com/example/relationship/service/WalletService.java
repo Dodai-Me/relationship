@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class WalletService {
-    WalletDAO walletDAO;
+    private final WalletDAO walletDAO;
 
     @Autowired
     WalletService(WalletDAO walletDAO){

@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class WalletController {
 
-    WalletService walletService;
+    private final WalletService walletService;
 
     @Autowired
     public WalletController(WalletService walletService){
