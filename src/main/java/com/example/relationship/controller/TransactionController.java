@@ -34,8 +34,4 @@ public class TransactionController {
         return transactionService.findById(transactionId);
     }
 
-    @DeleteMapping("/wallets/{walletId}/transactions/{transactionId}")
-    public String deleteById(@PathVariable Long transactionId){
-        return transactionService.deleteById(transactionId);
-    }
 }

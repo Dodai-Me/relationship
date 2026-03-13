@@ -72,11 +72,6 @@ public class TransactionService {
         throw new EntityNotFoundException("Could not find Transaction ID " + id);
     }
 
-    public String deleteById(Long id){
-        transactionRepository.deleteById(id);
-        return "Transaction ID " + id + " has been deleted";
-    }
-
     public TransactionDTO transactionToTransactionDTO(Transaction transaction){
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setTransactionType(transaction.getTransactionType());
