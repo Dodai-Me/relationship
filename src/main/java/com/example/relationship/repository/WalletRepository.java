@@ -1,8 +1,8 @@
-package com.example.relationship.dao;
+package com.example.relationship.repository;
 
 import com.example.relationship.entity.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WalletDAO extends JpaRepository<Wallet, Long> {}
+public interface WalletRepository extends JpaRepository<Wallet, Long> {}

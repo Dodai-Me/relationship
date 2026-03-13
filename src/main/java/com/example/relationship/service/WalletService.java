@@ -1,7 +1,7 @@
 package com.example.relationship.service;
 
 import com.example.relationship.api_model.CreateWalletRequest;
-import com.example.relationship.dao.WalletDAO;
+import com.example.relationship.repository.WalletRepository;
 import com.example.relationship.dto.WalletDTO;
 import com.example.relationship.entity.Wallet;
 import com.example.relationship.exception.EntityNotFoundException;
@@ -13,26 +13,26 @@ import java.util.Optional;
 
 @Service
 public class WalletService {
-    private final WalletDAO walletDAO;
+    private final WalletRepository walletRepository;
 
     @Autowired
-    WalletService(WalletDAO walletDAO){
-        this.walletDAO = walletDAO;
+    WalletService(WalletRepository walletRepository){
+        this.walletRepository = walletRepository;
     }
 
     public WalletDTO addWallet(CreateWalletRequest createWalletRequest){
         Wallet wallet = new Wallet();
         wallet.setBalance(createWalletRequest.getBalance());
-        walletDAO.save(wallet);
+        walletRepository.save(wallet);
         return walletToWalletDTO(wallet);
     }
 
     public List<WalletDTO> findAllWallets(){
-        return walletDAO.findAll().stream().map(this::walletToWalletDTO).toList();
+        return walletRepository.findAll().stream().map(this::walletToWalletDTO).toList();
     }
 
     public WalletDTO findById(Long id){
-        Optional<Wallet> optionalWallet = walletDAO.findById(id);
+        Optional<Wallet> optionalWallet = walletRepository.findById(id);
 
         if(optionalWallet.isPresent()){
             return walletToWalletDTO(optionalWallet.get());
@@ -42,7 +42,7 @@ public class WalletService {
     }
 
     public WalletDTO updateWallet(Long id, CreateWalletRequest createWalletRequest){
-        Optional<Wallet> optionalWallet = walletDAO.findById(id);
+        Optional<Wallet> optionalWallet = walletRepository.findById(id);
         Wallet wallet = new Wallet();
 
         if(optionalWallet.isPresent()){
@@ -50,12 +50,12 @@ public class WalletService {
             wallet.setBalance(createWalletRequest.getBalance());
         }
 
-        walletDAO.save(wallet);
+        walletRepository.save(wallet);
         return walletToWalletDTO(wallet);
     }
 
     public String deleteById(Long id){
-        walletDAO.deleteById(id);
+        walletRepository.deleteById(id);
         return "Wallet ID " + id + " has been deleted";
     }
 

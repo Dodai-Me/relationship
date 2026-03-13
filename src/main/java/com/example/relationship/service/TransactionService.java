@@ -1,8 +1,8 @@
 package com.example.relationship.service;
 
 import com.example.relationship.api_model.CreateTransactionRequest;
-import com.example.relationship.dao.TransactionDAO;
-import com.example.relationship.dao.WalletDAO;
+import com.example.relationship.repository.TransactionRepository;
+import com.example.relationship.repository.WalletRepository;
 import com.example.relationship.dto.TransactionDTO;
 import com.example.relationship.entity.Transaction;
 import com.example.relationship.entity.Wallet;
@@ -16,13 +16,13 @@ import java.util.Optional;
 
 @Service
 public class TransactionService {
-    private final WalletDAO walletDAO;
-    private final TransactionDAO transactionDAO;
+    private final WalletRepository walletRepository;
+    private final TransactionRepository transactionRepository;
 
     @Autowired
-    public TransactionService(WalletDAO walletDAO, TransactionDAO transactionDAO){
-        this.walletDAO = walletDAO;
-        this.transactionDAO = transactionDAO;
+    public TransactionService(WalletRepository walletRepository, TransactionRepository transactionRepository){
+        this.walletRepository = walletRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public TransactionDTO createTransaction(CreateTransactionRequest createTransactionRequest){
@@ -31,7 +31,7 @@ public class TransactionService {
         transaction.setAmount(createTransactionRequest.getAmount());
         transaction.setTransactionType(createTransactionRequest.getTransactionType());
 
-        Optional<Wallet> optionalWallet = walletDAO.findById(createTransactionRequest.getWalletId());
+        Optional<Wallet> optionalWallet = walletRepository.findById(createTransactionRequest.getWalletId());
 
         if(optionalWallet.isPresent()){
             wallet = optionalWallet.get();
@@ -45,25 +45,25 @@ public class TransactionService {
         if(createTransactionRequest.getTransactionType() == TransactionType.DEPOSIT){
             Long totalAmount = wallet.getBalance() + createTransactionRequest.getAmount();
             wallet.setBalance(totalAmount);
-            walletDAO.save(wallet);
+            walletRepository.save(wallet);
         }
 
         if (createTransactionRequest.getTransactionType() == TransactionType.WITHDRAWAL){
             Long totalAmount = wallet.getBalance() - createTransactionRequest.getAmount();
             wallet.setBalance(totalAmount);
-            walletDAO.save(wallet);
+            walletRepository.save(wallet);
         }
 
-        transactionDAO.save(transaction);
+        transactionRepository.save(transaction);
         return transactionToTransactionDTO(transaction);
     }
 
     public List<TransactionDTO> findAllTransactions(){
-        return transactionDAO.findAll().stream().map(this::transactionToTransactionDTO).toList();
+        return transactionRepository.findAll().stream().map(this::transactionToTransactionDTO).toList();
     }
 
     public TransactionDTO findById(Long id){
-        Optional<Transaction> optionalTransaction = transactionDAO.findById(id);
+        Optional<Transaction> optionalTransaction = transactionRepository.findById(id);
 
         if(optionalTransaction.isPresent()){
             return transactionToTransactionDTO(optionalTransaction.get());
@@ -73,7 +73,7 @@ public class TransactionService {
     }
 
     public TransactionDTO updateTransaction(CreateTransactionRequest createTransactionRequest, Long id){
-        Optional<Transaction> optionalTransaction = transactionDAO.findById(id);
+        Optional<Transaction> optionalTransaction = transactionRepository.findById(id);
         Transaction transaction = new Transaction();
         if(optionalTransaction.isPresent()){
             transaction = optionalTransaction.get();
@@ -81,12 +81,12 @@ public class TransactionService {
             transaction.setAmount(createTransactionRequest.getAmount());
         }
 
-        transactionDAO.save(transaction);
+        transactionRepository.save(transaction);
         return transactionToTransactionDTO(transaction);
     }
 
     public String deleteById(Long id){
-        transactionDAO.deleteById(id);
+        transactionRepository.deleteById(id);
         return "Transaction ID " + id + " has been deleted";
     }
 
