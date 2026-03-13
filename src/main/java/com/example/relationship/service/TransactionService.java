@@ -72,19 +72,6 @@ public class TransactionService {
         throw new EntityNotFoundException("Could not find Transaction ID " + id);
     }
 
-    public TransactionDTO updateTransaction(CreateTransactionRequest createTransactionRequest, Long id){
-        Optional<Transaction> optionalTransaction = transactionRepository.findById(id);
-        Transaction transaction = new Transaction();
-        if(optionalTransaction.isPresent()){
-            transaction = optionalTransaction.get();
-            transaction.setTransactionType(createTransactionRequest.getTransactionType());
-            transaction.setAmount(createTransactionRequest.getAmount());
-        }
-
-        transactionRepository.save(transaction);
-        return transactionToTransactionDTO(transaction);
-    }
-
     public String deleteById(Long id){
         transactionRepository.deleteById(id);
         return "Transaction ID " + id + " has been deleted";

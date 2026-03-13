@@ -34,11 +34,6 @@ public class TransactionController {
         return transactionService.findById(transactionId);
     }
 
-    @PutMapping("/wallets/{walletId}/transactions/{transactionId}")
-    public TransactionDTO updateTransaction(@RequestBody CreateTransactionRequest createTransactionRequest, @PathVariable Long transactionId){
-        return transactionService.updateTransaction(createTransactionRequest, transactionId);
-    }
-
     @DeleteMapping("/wallets/{walletId}/transactions/{transactionId}")
     public String deleteById(@PathVariable Long transactionId){
         return transactionService.deleteById(transactionId);
