@@ -7,7 +7,11 @@ import com.example.relationship.dto.UserDTO;
 import com.example.relationship.entity.User;
 import com.example.relationship.entity.Wallet;
 import com.example.relationship.exception.EntityNotFoundException;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,6 +68,27 @@ public class UserService {
             user.setLastName(createUserRequest.getLastName());
         }
         userRepository.save(user);
+        return userToUserDTO(user);
+    }
+
+
+    public UserDTO partialUpdate(Long id, Map<String, Object> update){
+        Optional<User> optionalUser = userRepository.findById(id);
+        User user;
+
+        if(optionalUser.isPresent()){
+            user = optionalUser.get();
+        } else {
+            user = new User();
+        }
+
+        update.forEach((key, value) -> {
+            Field field = ReflectionUtils.findField(User.class, key);
+            if(field != null){
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, user, value);
+            }
+        });
         return userToUserDTO(user);
     }
 

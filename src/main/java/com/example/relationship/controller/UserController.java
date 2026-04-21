@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -37,6 +38,11 @@ public class UserController {
     @PutMapping("users/{userId}")
     public UserDTO updateUser(@PathVariable Long userId, @RequestBody CreateUserRequest createUserRequest){
         return userService.updateUser(userId, createUserRequest);
+    }
+
+    @PatchMapping("users/{userId}")
+    public UserDTO partialUpdate(@PathVariable Long userId, @RequestBody Map<String, Object> update){
+        return userService.partialUpdate(userId, update);
     }
 
     @DeleteMapping("users/{userId}")
