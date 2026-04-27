@@ -10,3 +10,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+springdoc:
+  override-with-generic-response: false
