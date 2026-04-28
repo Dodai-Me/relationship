@@ -10,6 +10,7 @@ import com.example.relationship.enums.TransactionType;
 import com.example.relationship.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,12 @@ public class TransactionService {
         }
 
         throw new EntityNotFoundException("Could not find Transaction ID " + id);
+    }
+
+    @Transactional
+    public String deleteTransaction(Long walletId, Long id){
+        transactionRepository.deleteByWalletIdAndId(walletId, id);
+        return "Wallet ID " + walletId + " and Transaction ID " + id + " have been deleted";
     }
 
     public TransactionDTO transactionToTransactionDTO(Transaction transaction){

@@ -54,4 +54,13 @@ public class TransactionController {
         return transactionService.findById(transactionId);
     }
 
+    @DeleteMapping("/wallets/{walletId}/transactions/{transactionId}")
+    @Operation(summary = "Delete a wallet", description = "Deletes a single wallet by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Wallet deleted"),
+            @ApiResponse(responseCode = "404", description = "Wallet not deleted")
+    })
+    public String deleteByWalletId(@PathVariable Long walletId, @PathVariable Long transactionId){
+        return transactionService.deleteTransaction(walletId, transactionId);
+    }
 }
