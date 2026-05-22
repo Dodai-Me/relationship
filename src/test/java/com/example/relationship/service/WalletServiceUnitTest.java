@@ -1,5 +1,4 @@
 package com.example.relationship.service;
-
 import com.example.relationship.exception.EntityNotFoundException;
 import com.example.relationship.repository.WalletRepository;
 import org.junit.jupiter.api.Test;
@@ -9,18 +8,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class WalletServiceTest {
+class WalletServiceUnitTest {
 
     @Mock
     WalletRepository walletRepository;
 
     @InjectMocks
     WalletService walletService;
+
 
     @Test
     void walletIdShouldBePositive() {
