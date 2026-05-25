@@ -38,7 +38,7 @@ class WalletServiceIntegrationTest {
     }
 
     @Test
-    void updateWalletTakesEffect(){
+    void updateWalletBalanceTakesEffect(){
         CreateWalletRequest updateRequest = new CreateWalletRequest();
         updateRequest.setBalance(73273273L);
 
